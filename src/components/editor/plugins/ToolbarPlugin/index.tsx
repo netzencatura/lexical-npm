@@ -1,8 +1,16 @@
-import { useMemo } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
+
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
-import { Menu, Redo2, Type, Undo2, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  Redo2,
+  Type,
+  Undo2,
+  Image as ImageIcon,
+  ChevronDown,
+} from "lucide-react";
 
 import {
   ToolbarButton,
@@ -27,16 +35,17 @@ import {
   getBlockTypeOptions,
   getFormatButtonOptions,
 } from "./config";
+import { INSERT_IMAGE_COMMAND } from "../../plugins/ImagePlugin";
 import "./styles.css";
 
-export type ToolbarPluginProps = {};
 
-export function ToolbarPlugin({}: ToolbarPluginProps) {
+export function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const { blockType, formats, canUndo, canRedo } = useToolbarState(editor);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const isScreenMediumWidth = useMediaQuery("(min-width: 700px)");
-  const isScreenLargeWidth = useMediaQuery("(min-width: 1200px)");
+  const isMedium = useMediaQuery("(min-width: 700px)");
+  const isLarge = useMediaQuery("(min-width: 1200px)");
 
   const blockOptions = useMemo(
     () => getBlockTypeOptions(editor, blockType),
@@ -51,201 +60,208 @@ export function ToolbarPlugin({}: ToolbarPluginProps) {
     const textColorBtn = all.find((b) => b.title === "Text Color");
     const pinned = textColorBtn ? [textColorBtn] : [];
 
-    return isScreenLargeWidth
-      ? { visible: all, hidden: [] }
-      : isScreenMediumWidth
-        ? { visible: all.slice(0, 4), hidden: all.slice(4) }
-        : {
-            visible: pinned,
-            hidden: all.filter((item) => !pinned.includes(item)),
-          };
-  }, [editor, formats, isScreenLargeWidth, isScreenMediumWidth]);
+    if (isLarge) return { visible: all, hidden: [] };
+    if (isMedium) return { visible: all.slice(0, 4), hidden: all.slice(4) };
+    return {
+      visible: pinned,
+      hidden: all.filter((b) => b.title !== "Text Color"),
+    };
+  }, [editor, formats, isMedium, isLarge]);
 
   const blockTypePopover = usePopover();
-  const toolbarOverflowPopover = usePopover();
-  const textColorPopover = usePopover();
-  const codeLanguagePopover = usePopover();
+  const overflowPopover = usePopover();
+  const colorPopover = usePopover();
+  const codeLangPopover = usePopover();
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Placeholder: nahraď vlastní logikou uploadu
+      const imageUrl = URL.createObjectURL(file);
+      editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+        src: imageUrl,
+        alt: file.name,
+      });
+    } catch (error) {
+      console.error("Upload error:", error);
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   return (
-    <div className="toolbar">
-      <div className="toolbar-history-group">
-        <ToolbarButton
-          title="Undo"
-          active={false}
-          disabled={!canUndo}
-          icon={Undo2}
-          onClick={() => {
-            handleUndo(editor);
-          }}
-        />
-        <ToolbarButton
-          title="Redo"
-          active={false}
-          disabled={!canRedo}
-          icon={Redo2}
-          onClick={() => {
-            handleRedo(editor);
-          }}
-        />
-      </div>
-      <div className="toolbar-formatting-container">
-        {blockType === "code" ? (
-          <>
-            <div className="toolbar-text-type-group">
-              <ToolbarButton
-                title="Back to Paragraph"
-                icon={Type}
-                active={false}
-                onClick={() => setParagraph(editor)}
-              />
-            </div>
+    <>
+      <div className="toolbar">
+        <div className="toolbar-history-group">
+          <ToolbarButton
+            title="Undo"
+            disabled={!canUndo}
+            icon={Undo2}
+            active={false}
+            onClick={() => handleUndo(editor)}
+          />
+          <ToolbarButton
+            title="Redo"
+            disabled={!canRedo}
+            icon={Redo2}
+            active={false}
+            onClick={() => handleRedo(editor)}
+          />
+        </div>
 
-            <div className="toolbar-code-language-group">
-              <ToolbarDropdownButton
-                label={getCodeLanguage(editor)}
-                chevronIcon={ChevronDown}
-                opened={codeLanguagePopover.isOpen}
-                onClick={codeLanguagePopover.open}
-              />
-            </div>
-            <Popover
-              open={codeLanguagePopover.isOpen}
-              anchorEl={codeLanguagePopover.anchorEl}
-              onClose={codeLanguagePopover.close}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-            >
-              {CODE_LANGUAGE_OPTIONS_SHIKI.map((language, index) => (
-                <PopoverItem
-                  key={index}
-                  title={language[1]}
-                  active={getCodeLanguage(editor) === language[0]}
-                  onClick={() => {
-                    setCodeLanguage(editor, language[0]);
-                    codeLanguagePopover.close();
-                  }}
-                />
-              ))}
-            </Popover>
-          </>
-        ) : (
-          <>
-            <div className="toolbar-text-type-group">
-              <ToolbarBlockTypeButton
-                icon={
-                  blockOptions.find((option) => option.active)?.icon ?? Type
-                }
-                chevronIcon={ChevronDown}
-                opened={blockTypePopover.isOpen}
-                onClick={blockTypePopover.open}
-              />
-            </div>
-            <div className="toolbar-formatting-group">
-              {formatOptions.visible.map((button, index) => (
+        <div className="toolbar-formatting-container">
+          {blockType === "code" ? (
+            <>
+              <div className="toolbar-text-type-group">
                 <ToolbarButton
-                  key={index}
-                  title={button.title}
-                  active={button.active}
-                  icon={button.icon}
-                  onClick={(event) => {
-                    if (button.title === "Text Color")
-                      return event && textColorPopover.open(event);
-
-                    button.onClick?.();
-                  }}
-                />
-              ))}
-              {!isScreenLargeWidth && (
-                <ToolbarButton
-                  title="More"
+                  title="Back to Paragraph"
+                  icon={Type}
                   active={false}
-                  icon={Menu}
-                  onClick={(event) =>
-                    event && toolbarOverflowPopover.open(event)
-                  }
+                  onClick={() => setParagraph(editor)}
                 />
-              )}
-            </div>
-          </>
-        )}
+              </div>
+
+              <div className="toolbar-code-language-group">
+                <ToolbarDropdownButton
+                  label={getCodeLanguage(editor)}
+                  chevronIcon={ChevronDown}
+                  opened={codeLangPopover.isOpen}
+                  onClick={codeLangPopover.open}
+                />
+              </div>
+
+              <Popover
+                open={codeLangPopover.isOpen}
+                anchorEl={codeLangPopover.anchorEl}
+                onClose={codeLangPopover.close}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+              >
+                {CODE_LANGUAGE_OPTIONS_SHIKI.map(([lang, label]) => (
+                  <PopoverItem
+                    key={lang}
+                    title={label}
+                    active={getCodeLanguage(editor) === lang}
+                    onClick={() => {
+                      setCodeLanguage(editor, lang);
+                      codeLangPopover.close();
+                    }}
+                  />
+                ))}
+              </Popover>
+            </>
+          ) : (
+            <>
+              <div className="toolbar-text-type-group">
+                <ToolbarBlockTypeButton
+                  icon={blockOptions.find((o) => o.active)?.icon ?? Type}
+                  chevronIcon={ChevronDown}
+                  opened={blockTypePopover.isOpen}
+                  onClick={blockTypePopover.open}
+                />
+              </div>
+
+              <div className="toolbar-formatting-group">
+                {formatOptions.visible.map((btn) => (
+                  <ToolbarButton
+                    key={btn.title}
+                    title={btn.title}
+                    active={btn.active}
+                    icon={btn.icon}
+                    onClick={(e) =>
+                      btn.title === "Text Color"
+                        ? e && colorPopover.open(e)
+                        : btn.onClick?.()
+                    }
+                  />
+                ))}
+
+                <ToolbarButton
+                  title="Upload new image"
+                  icon={ImageIcon}
+                  active={false}
+                  onClick={() => fileInputRef.current?.click()}
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+
+                {!isLarge && (
+                  <ToolbarButton
+                    title="More"
+                    icon={Menu}
+                    active={false}
+                    onClick={(e) => e && overflowPopover.open(e)}
+                  />
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
+
       <Popover
         open={blockTypePopover.isOpen}
         anchorEl={blockTypePopover.anchorEl}
         onClose={blockTypePopover.close}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        {blockOptions.map((option, index) => (
+        {blockOptions.map((opt) => (
           <PopoverItem
-            key={index}
-            title={option.title}
-            active={option.active}
-            icon={option.icon}
+            key={opt.title}
+            title={opt.title}
+            active={opt.active}
+            icon={opt.icon}
             onClick={() => {
               blockTypePopover.close();
-              if (option.onClick) option.onClick();
+              opt.onClick?.();
             }}
           />
         ))}
       </Popover>
-      <Popover
-        open={toolbarOverflowPopover.isOpen}
-        anchorEl={toolbarOverflowPopover.anchorEl}
-        onClose={toolbarOverflowPopover.close}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        {formatOptions.hidden.map((option, index) => (
-          <PopoverItem
-            key={index}
-            title={option.title}
-            active={option.active}
-            icon={option.icon}
-            onClick={() => {
-              if (option.onClick) option.onClick();
 
-              if (option.title !== "Text Align")
-                setTimeout(toolbarOverflowPopover.close, 0);
+      <Popover
+        open={overflowPopover.isOpen}
+        anchorEl={overflowPopover.anchorEl}
+        onClose={overflowPopover.close}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        {formatOptions.hidden.map((opt) => (
+          <PopoverItem
+            key={opt.title}
+            title={opt.title}
+            active={opt.active}
+            icon={opt.icon}
+            onClick={() => {
+              opt.onClick?.();
+              if (opt.title !== "Text Align")
+                setTimeout(overflowPopover.close, 0);
             }}
           />
         ))}
       </Popover>
+
       <ColorPickerPopover
         value={formats.color}
-        open={textColorPopover.isOpen}
-        anchorEl={textColorPopover.anchorEl}
-        onClose={textColorPopover.close}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
+        open={colorPopover.isOpen}
+        anchorEl={colorPopover.anchorEl}
+        onClose={colorPopover.close}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
         marginThreshold={60}
         onColorChange={(color) => setTextColor(editor, color)}
       />
-    </div>
+    </>
   );
 }
 

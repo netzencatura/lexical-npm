@@ -1,5 +1,5 @@
 import { Resizable } from "re-resizable";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getNodeByKey } from "lexical"; 
 
@@ -40,20 +40,59 @@ export function ResizableImage({
   const resizableWrapperRef = useRef<Resizable | null>(null);
   const imageContainerRef = useRef<HTMLDivElement | null>(null);
   
-  const [resizableWidth, setResizableWidth] = useState<string | null>(null);
-  const [resizableHeight, setResizableHeight] = useState<number | null>(null);
+  // ✅ Vypočítej přímo během renderování
+  const initialWidth = width && width !== "inherit" ? `${width}px` : null;
+  const initialHeight = height && height !== "inherit" ? height : null;
+  
+  const [resizableWidth, setResizableWidth] = useState<string | null>(initialWidth);
+  const [resizableHeight, setResizableHeight] = useState<number | null>(initialHeight);
   const [selected, setSelected] = useState(false);
 
-  useEffect(() => {
+  const calculateRelativeWidth = (childWidth: number, parentWidth: number) => {
+    if (!parentWidth) return "100%";
+    if (childWidth >= parentWidth) return "100%";
+    const percentage = (childWidth / parentWidth) * 100;
+    return `${percentage.toFixed(2)}%`;
+  };
+
+  const handleImageLoad = useCallback((image: HTMLImageElement) => {
     if (width && width !== "inherit") {
       setResizableWidth(`${width}px`);
+      return;
     }
-    if (height && height !== "inherit") {
-      setResizableHeight(height);
-    }
-  }, [width, height]);
 
-  useEffect(() => createImageAndAppend(), [src]);
+    setResizableWidth(
+      calculateRelativeWidth(
+        image.naturalWidth,
+        resizableWrapperRef.current?.getParentSize().width ?? 0
+      )
+    );
+  }, [width]);
+
+  const createImageAndAppend = useCallback(() => {
+    const image = new Image();
+    image.src = src;
+    image.style.maxWidth = '100%';
+    image.style.height = 'auto';
+    image.style.display = 'block';
+
+    image.onload = () => handleImageLoad(image);
+
+    if (imageContainerRef.current) {
+      imageContainerRef.current.innerHTML = "";
+      imageContainerRef.current.appendChild(image);
+    }
+  }, [src, handleImageLoad]);
+
+  const handleDeleteImage = useCallback(() => {
+    editor.dispatchCommand(DELETE_IMAGE_COMMAND, {
+      key: nodeKey,
+    });
+  }, [editor, nodeKey]);
+
+  useEffect(() => {
+    createImageAndAppend();
+  }, [createImageAndAppend]);
   
   useEffect(() => {
     const handleDeselect = (event: MouseEvent) => {
@@ -77,45 +116,13 @@ export function ResizableImage({
     
     document.addEventListener("keydown", handleDeleteKeyPress);
     return () => document.removeEventListener("keydown", handleDeleteKeyPress);
-  }, [selected]);
-
-  const calculateRelativeWidth = (childWidth: number, parentWidth: number) => {
-    if (!parentWidth) return "100%";
-    if (childWidth >= parentWidth) return "100%";
-    const percentage = (childWidth / parentWidth) * 100;
-    return `${percentage.toFixed(2)}%`;
-  };
-
-  const createImageAndAppend = () => {
-    const image = new Image();
-    image.src = src;
-    image.style.maxWidth = '100%';
-    image.style.height = 'auto';
-    image.style.display = 'block';
-
-    image.onload = () => handleImageLoad(image);
-
-    if (imageContainerRef.current) {
-      imageContainerRef.current.innerHTML = "";
-      imageContainerRef.current.appendChild(image);
-    }
-  };
-
-  const handleImageLoad = (image: HTMLImageElement) => {
-    if (width && width !== "inherit") {
-      setResizableWidth(`${width}px`);
-      return;
-    }
-
-    setResizableWidth(
-      calculateRelativeWidth(
-        image.naturalWidth,
-        resizableWrapperRef.current?.getParentSize().width ?? 0
-      )
-    );
-  };
+  }, [selected, handleDeleteImage]);
   
-  const handleResizeStop = (_event: any, _direction: any, elementRef: any) => {
+  const handleResizeStop = (
+    _event: MouseEvent | TouchEvent,
+    _direction: string,
+    elementRef: HTMLElement
+  ) => {
     const newWidth = elementRef.offsetWidth;
     const newHeight = elementRef.offsetHeight;
 
@@ -150,12 +157,6 @@ export function ResizableImage({
           node.setAlignment("left"); 
         }
       }
-    });
-  };
-  
-  const handleDeleteImage = () => {
-    editor.dispatchCommand(DELETE_IMAGE_COMMAND, {
-      key: nodeKey,
     });
   };
 

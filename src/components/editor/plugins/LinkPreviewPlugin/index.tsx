@@ -16,7 +16,7 @@ import "./styles.css";
 
 export function LinkPreviewPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
 
@@ -26,7 +26,7 @@ export function LinkPreviewPlugin(): JSX.Element | null {
     const parentAnchor = target.closest("a");
 
     if (parentAnchor) {
-      setAnchorEl(parentAnchor as any);
+      setAnchorEl(parentAnchor);
       setOpen(true);
     } else close();
   };

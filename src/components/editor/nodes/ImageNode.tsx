@@ -12,11 +12,9 @@ import {
 import { type JSX } from "react";
 import { ImageWrapper } from "../ui/ImageWrapper";
 
-type DOMNode = globalThis.Node;
-
 // Exporty a typy (musí být na začátku)
-export type ImageAlignment = 'left' | 'center' | 'right';
-export type ImageFloat = 'none' | 'left' | 'right';
+export type ImageAlignment = "left" | "center" | "right";
+export type ImageFloat = "none" | "left" | "right";
 
 export interface ImagePayload {
   key?: NodeKey;
@@ -57,7 +55,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   __float: ImageFloat;
 
   // ... (Statické metody a constructor)
-  
+
   static getType(): string {
     return "img";
   }
@@ -78,15 +76,16 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   // ✅ importDOM vrací DOMConversionMap
   static importDOM(): DOMConversionMap | null {
     return {
-      img: (node: DOMNode) => ({
+      img: () => ({
         conversion: $convertImageElement,
         priority: 0,
       }),
     };
   }
-  
+
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const { src, alt, maxWidth, height, width, alignment, float } = serializedNode;
+    const { src, alt, maxWidth, height, width, alignment, float } =
+      serializedNode;
     return new ImageNode(
       src,
       alt,
@@ -97,7 +96,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       float ?? "none"
     );
   }
-  
+
   constructor(
     src: string,
     alt: string,
@@ -118,27 +117,39 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     this.__float = float || "none";
   }
 
-  getWidth(): "inherit" | number { return this.__width; }
-  getHeight(): "inherit" | number { return this.__height; }
-  getAlignment(): ImageAlignment { return this.__alignment; }
-  getFloat(): ImageFloat { return this.__float; }
-  getSrc(): string { return this.__src; }
-  getAlt(): string { return this.__alt; }
+  getWidth(): "inherit" | number {
+    return this.__width;
+  }
+  getHeight(): "inherit" | number {
+    return this.__height;
+  }
+  getAlignment(): ImageAlignment {
+    return this.__alignment;
+  }
+  getFloat(): ImageFloat {
+    return this.__float;
+  }
+  getSrc(): string {
+    return this.__src;
+  }
+  getAlt(): string {
+    return this.__alt;
+  }
 
-  setWidth(width: "inherit" | number): void { 
-    this.getWritable().__width = width; 
+  setWidth(width: "inherit" | number): void {
+    this.getWritable().__width = width;
   }
-  
-  setHeight(height: "inherit" | number): void { 
-    this.getWritable().__height = height; 
+
+  setHeight(height: "inherit" | number): void {
+    this.getWritable().__height = height;
   }
-  
-  setAlignment(alignment: ImageAlignment): void { 
-    this.getWritable().__alignment = alignment; 
+
+  setAlignment(alignment: ImageAlignment): void {
+    this.getWritable().__alignment = alignment;
   }
-  
-  setFloat(float: ImageFloat): void { 
-    this.getWritable().__float = float; 
+
+  setFloat(float: ImageFloat): void {
+    this.getWritable().__float = float;
   }
 
   createDOM(): HTMLElement {
@@ -153,7 +164,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     const element = document.createElement("img");
     element.setAttribute("src", this.__src);
     element.setAttribute("alt", this.__alt);
-    
+
     if (this.__width !== "inherit") {
       element.setAttribute("width", this.__width.toString());
     }
@@ -162,9 +173,9 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     }
 
     const styles: string[] = [];
-    styles.push('max-width: 100%');
-    styles.push('height: auto');
-    
+    styles.push("max-width: 100%");
+    styles.push("height: auto");
+
     if (this.__width !== "inherit") {
       styles.push(`width: ${this.__width}px`);
     }
@@ -173,29 +184,29 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     }
 
     if (this.__float === "left") {
-      styles.push('float: left');
-      styles.push('margin-right: 16px');
-      styles.push('margin-bottom: 8px');
+      styles.push("float: left");
+      styles.push("margin-right: 16px");
+      styles.push("margin-bottom: 8px");
     } else if (this.__float === "right") {
-      styles.push('float: right');
-      styles.push('margin-left: 16px');
-      styles.push('margin-bottom: 8px');
+      styles.push("float: right");
+      styles.push("margin-left: 16px");
+      styles.push("margin-bottom: 8px");
     } else {
-      styles.push('display: block');
-      
+      styles.push("display: block");
+
       if (this.__alignment === "center") {
-        styles.push('margin-left: auto');
-        styles.push('margin-right: auto');
+        styles.push("margin-left: auto");
+        styles.push("margin-right: auto");
       } else if (this.__alignment === "right") {
-        styles.push('margin-left: auto');
-        styles.push('margin-right: 0');
+        styles.push("margin-left: auto");
+        styles.push("margin-right: 0");
       } else if (this.__alignment === "left") {
-        styles.push('margin-left: 0');
-        styles.push('margin-right: auto');
+        styles.push("margin-left: 0");
+        styles.push("margin-right: auto");
       }
     }
 
-    element.setAttribute('style', styles.join('; '));
+    element.setAttribute("style", styles.join("; "));
 
     return { element };
   }
@@ -245,11 +256,11 @@ export function $createImageNode({
 }: ImagePayload) {
   return $applyNodeReplacement(
     new ImageNode(
-      src, 
-      alt, 
-      maxWidth ?? 500, 
-      width, 
-      height, 
+      src,
+      alt,
+      maxWidth ?? 500,
+      width,
+      height,
       alignment ?? "left",
       float ?? "none",
       key
@@ -263,18 +274,17 @@ export function $isImageNode(
   return node instanceof ImageNode;
 }
 
-
 // --- Konverzní funkce (potřebuje $createImageNode) ---
 function $convertImageElement(domNode: Node): DOMConversionOutput | null {
-    if (domNode instanceof HTMLImageElement) {
-        const { alt: altText, src, width, height } = domNode;
-        const node = $createImageNode({
-            alt: altText,
-            src,
-            width: width,
-            height: height
-        });
-        return { node };
-    }
-    return null;
+  if (domNode instanceof HTMLImageElement) {
+    const { alt: altText, src, width, height } = domNode;
+    const node = $createImageNode({
+      alt: altText,
+      src,
+      width: width,
+      height: height,
+    });
+    return { node };
+  }
+  return null;
 }

@@ -113,7 +113,7 @@ function getSelectionFormats(selection: RangeSelection) {
   const anchorNode = selection.anchor.getNode();
   const parent = anchorNode.getParent();
   const nearestBlockElem = $getNearestBlockElementAncestorOrThrow(anchorNode);
-  let topNode = anchorNode.getTopLevelElementOrThrow();
+  const topNode = anchorNode.getTopLevelElementOrThrow();
 
   let listType: ListNodeTagType | undefined;
   if ($isListNode(topNode)) {

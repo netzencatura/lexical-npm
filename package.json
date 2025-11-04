@@ -1,6 +1,6 @@
 {
   "name": "@netzen/lexical-npm",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Feature-rich text editor built on Lexical with React, supporting images, code highlighting, and collaborative editing",
   "author": "netzen",
   "license": "MIT",
