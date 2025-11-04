@@ -1,0 +1,121 @@
+{
+  "name": "@netzen/lexical-npm",
+  "version": "0.0.1",
+  "description": "Feature-rich text editor built on Lexical with React, supporting images, code highlighting, and collaborative editing",
+  "author": "netzen",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "lexical",
+    "editor",
+    "rich-text",
+    "wysiwyg",
+    "react",
+    "text-editor",
+    "richtext",
+    "collaborative",
+    "yjs",
+    "markdown",
+    "contenteditable"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/netzencatura/lexical-npm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/netzencatura/lexical-npm/issues"
+  },
+  "homepage": "https://github.com/netzencatura/lexical-npm#readme",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --project tsconfig.build.json && vite build && cp temp-types/index.d.ts dist/ && cp temp-types/index.d.ts.map dist/ && rm -rf temp-types",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@lexical/react": "^0.38.0",
+    "@mui/material": "^7.0.0",
+    "lexical": "^0.38.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@lexical/yjs": {
+      "optional": true
+    },
+    "yjs": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.3",
+    "@lexical/code-shiki": "^0.38.1",
+    "lucide-react": "^0.552.0",
+    "re-resizable": "^6.11.2",
+    "shiki": "^3.12.2"
+  },
+  "optionalDependencies": {
+    "@lexical/yjs": "^0.38.1",
+    "yjs": "13.5.22"
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@eslint/js": "^9.33.0",
+    "@lexical/code": "^0.38.1",
+    "@lexical/html": "^0.38.1",
+    "@lexical/link": "^0.38.1",
+    "@lexical/list": "^0.38.1",
+    "@lexical/markdown": "^0.38.1",
+    "@lexical/react": "^0.38.1",
+    "@lexical/rich-text": "^0.38.1",
+    "@lexical/selection": "^0.38.1",
+    "@lexical/utils": "^0.38.1",
+    "@mui/material": "^7.3.2",
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "0.4.20",
+    "globals": "^16.3.0",
+    "lexical": "^0.38.1",
+    "prettier": "3.6.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.39.1",
+    "vite": "^7.1.2",
+    "vite-plugin-dts": "^4.5.4"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}

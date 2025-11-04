@@ -1,0 +1,33 @@
+/* Základní styly pro renderovaný obsah */
+.lexical-renderer img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Float styly */
+.lexical-renderer img[style*="float: left"] {
+  float: left;
+  margin-right: 16px;
+  margin-bottom: 8px;
+}
+
+.lexical-renderer img[style*="float: right"] {
+  float: right;
+  margin-left: 16px;
+  margin-bottom: 8px;
+}
+
+/* Alignment styly */
+.lexical-renderer img[style*="display: block"] {
+  display: block;
+}
+
+.lexical-renderer img[style*="margin-left: auto"][style*="margin-right: auto"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lexical-renderer img[style*="margin-left: auto"][style*="margin-right: 0"] {
+  margin-left: auto;
+  margin-right: 0;
+}

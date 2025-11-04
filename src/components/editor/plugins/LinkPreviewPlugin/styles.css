@@ -1,0 +1,106 @@
+/* --- Vaše stávající styly (toolbar, modal) --- 
+*/
+
+.toolbar {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  padding: 1.5rem 0.5rem;
+  box-sizing: border-box;
+  background-color: var(--toolbar-bg);
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+}
+
+.toolbar button {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: var(--toolbar-icon-color);
+}
+
+.toolbar button:hover:not(:disabled) {
+  color: var(--toolbar-icon-hover-color);
+}
+
+.toolbar button[data-active="true"] {
+  color: var(--toolbar-icon-active-color);
+}
+
+.toolbar-history-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.toolbar-formatting-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.toolbar-formatting-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.media-library-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-backdrop-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.media-library-content {
+  background: var(--toolbar-bg);
+  padding: 20px;
+  border-radius: 8px;
+  width: 800px;
+  max-width: 90vw;
+  height: 80vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Upravené styly pro preview --- 
+*/
+
+.preview__container {
+  display: flex;
+  border-radius: 6px;
+  background-color: var(--preview-bg);
+  color: var(--preview-text-color);
+  margin-top: 10px;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  overflow: hidden;
+}
+
+.preview__content {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-weight: 450;
+  margin-right: 0.6rem;
+}
+
+.preview__url {
+  margin-bottom: 2px;
+}
+
+.preview__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.active-icon-color {
+  color: var(--toolbar-icon-active-color);
+}

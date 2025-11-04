@@ -1,0 +1,41 @@
+# Source files
+src/
+public/
+demo/
+
+# Config files
+*.config.js
+*.config.ts
+.eslintrc
+.eslintrc.*
+eslint.config.js
+tsconfig.*.json
+vite.config.ts
+
+# Development files
+.vscode/
+.idea/
+*.log
+.DS_Store
+.env
+.env.*
+
+# Build artifacts
+node_modules/
+.yarn/
+yarn.lock
+package-lock.json
+
+# Tests
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+__tests__/
+coverage/
+
+# Other
+.git/
+.github/
+.gitignore
+index.html

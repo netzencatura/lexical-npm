@@ -1,0 +1,92 @@
+/* --- Popover --- */
+.custom-popover .MuiPopover-paper {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 0.5rem;
+    border-radius: 6px;
+    background-color: var(--popover-bg);
+    box-shadow: none;
+}
+
+/* --- Popover Item (tlačítko) --- */
+.popover-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--popover-item-bg);
+    color: var(--popover-item-text);
+    border-radius: 0;
+
+    height: 36px;
+    min-height: 36px;
+    padding: 0 6px 0 10px;
+
+    min-width: 170px;
+    font-size: 16.5px;
+    font-weight: 500;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.popover-item .popover-item-title {
+    flex-grow: 1;
+    text-align: left;
+    text-transform: uppercase;
+    margin-right: 0.5rem;
+}
+
+/* --- STYLY PRO IKONU (dle vzoru .toolbar-button) --- */
+.popover-item svg {
+    color: var(--popover-item-text);
+    transition: color 0.15s ease-in-out;
+    min-width: 24px;
+    min-height: 24px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+/* --- STAVY --- */
+
+.popover-item:hover {
+    color: var(--popover-item-hover-text);
+    background-color: var(--popover-item-bg);
+}
+
+.popover-item:hover svg {
+    color: var(--popover-item-hover-text);
+}
+
+.popover-item.is-active {
+    color: var(--popover-item-active-text);
+}
+
+.popover-item.is-active svg {
+    color: var(--popover-item-active-text);
+}
+
+
+/* --- Color Picker (beze změny) --- */
+.color-picker-popover {
+    display: flex;
+    gap: 0.4rem;
+    padding: 2px;
+}
+
+.color-circle-wrapper {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.color-circle {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.color-circle-checkmark {
+    color: var(--popover-checkmark-color);
+}

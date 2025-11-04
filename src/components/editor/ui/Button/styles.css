@@ -1,0 +1,111 @@
+.toolbar-button {
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent !important;
+}
+
+.toolbar-button svg {
+  color: var(--icon-color-default);
+  transition: color 0.15s ease-in-out;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.toolbar-button:hover svg {
+  color: var(--toolbar-icon-hover-color);
+}
+
+.toolbar-button.active svg {
+  color: var(--toolbar-icon-active-color);
+}
+
+.toolbar-button:disabled svg {
+  color: var(--icon-color-disabled);
+}
+
+.toolbar-block-button {
+  width: auto;
+  height: 36px;
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background-color: transparent !important;
+}
+
+.toolbar-block-button svg {
+  color: var(--icon-color-default);
+  transition: color 0.15s ease-in-out;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.toolbar-block-button svg:nth-child(2) {
+  color: var(--icon-color-subtle);
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.toolbar-block-button.opened svg:nth-child(2) {
+  color: var(--icon-color-default);
+  transform: rotate(180deg);
+}
+
+.toolbar-block-button:hover svg:nth-child(1) {
+  color: var(--toolbar-icon-hover-color);
+}
+
+.toolbar-block-button:hover svg:nth-child(2) {
+  color: var(--icon-color-default);
+}
+
+.toolbar-dropdown-button {
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background-color: transparent !important;
+  margin-right: -1rem;
+  text-transform: capitalize;
+  font-size: 16px;
+  color: var(--icon-color-default);
+  transition: color 0.15s ease-in-out;
+}
+
+.toolbar-dropdown-button svg {
+  color: var(--icon-color-default);
+  transition: color 0.15s ease-in-out;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.toolbar-dropdown-button svg:nth-child(2) {
+  color: var(--icon-color-subtle);
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.toolbar-dropdown-button.opened {
+  color: var(--toolbar-icon-color);
+}
+
+.toolbar-dropdown-button.opened svg:nth-child(2) {
+  color: var(--icon-color-default);
+  transform: rotate(180deg);
+}
+
+.toolbar-dropdown-button:hover {
+  color: var(--toolbar-icon-hover-color);
+}
+
+.toolbar-dropdown-button:hover svg:nth-child(1) {
+  color: var(--toolbar-icon-hover-color);
+}
+
+.toolbar-dropdown-button:hover svg:nth-child(2) {
+  color: var(--icon-color-default);
+}

@@ -1,0 +1,16 @@
+.editor-container {
+  outline: 1px solid var(--editor-border-color);
+  border-radius: 3px;
+  transition: outline-color 0.2s ease;
+  overflow: hidden;
+  background-color: var(--editor-bg-color);
+}
+
+.content-editable {
+  min-height: 200px;
+  padding: 20px;
+  outline: none;
+  height: 60dvh;
+  overflow-y: scroll;
+  color: inherit;
+}

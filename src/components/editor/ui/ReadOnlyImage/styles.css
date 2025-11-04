@@ -1,0 +1,42 @@
+.readonly-image-wrapper {
+  display: block;
+}
+
+.readonly-image-wrapper.float-left {
+  float: left;
+  margin-right: 16px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.readonly-image-wrapper.float-right {
+  float: right;
+  margin-left: 16px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.readonly-image-wrapper.align-left {
+  display: block;
+  margin-left: 0;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.readonly-image-wrapper.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.readonly-image-wrapper.align-right {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  width: fit-content;
+}
+
+.readonly-image-wrapper img {
+  display: block;
+}

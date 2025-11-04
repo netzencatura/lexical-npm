@@ -1,0 +1,250 @@
+:root {
+  /* --- Editor Obecné --- */
+  --editor-border-color: rgb(229, 229, 229);
+  --editor-bg-color: #ffffff;
+  --editor-text-color: #000000;
+  --editor-heading-border: rgba(0, 0, 0, 0.131);
+  --editor-link-color: #1d4ed8;
+  --editor-link-hover: #9333ea;
+  --editor-quote-color: rgb(81, 82, 85);
+  --editor-quote-border: #c7c4c4d9;
+  --editor-code-bg: #f9f8f7;
+  --editor-inline-code-bg: #ececec;
+
+  /* --- Toolbar --- */
+  --toolbar-bg: #F1F1F2;
+  --toolbar-button-bg: rgb(233, 233, 233);
+  --toolbar-button-hover-bg: rgb(210, 210, 210);
+  --toolbar-icon-color: #000000;
+  --toolbar-icon-hover-color: #000000;
+  --toolbar-icon-active-color: #ff9933;
+
+  /* --- Popover (Dropdown menu) --- */
+  --popover-bg: #EAEAEA;
+  --popover-item-bg: #f5f5f5;
+  --popover-item-text: #878787;
+  --popover-item-hover-text: #000000;
+  --popover-item-active-text: #ff9933;
+  --popover-checkmark-color: #ffffff;
+
+  /* --- Image Toolbar --- */
+  --image-toolbar-bg: #F1F1F2;
+  --image-toolbar-border: #ddd;
+  --image-toolbar-shadow: rgba(0, 0, 0, 0.15);
+  --image-toolbar-separator: #ddd;
+  --image-outline: #1976d2;
+
+  /* --- Preview (LinkPreviewPlugin) --- */
+  --preview-bg: #eaeaea;
+  --preview-text-color: #000000;
+  
+  /* --- NOVÉ PROMĚNNÉ (z hardcoded hodnot) --- */
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.8);
+  --icon-color-default: #808080;
+  --icon-color-subtle: #ABABAB;
+  --icon-color-disabled: #D9D9D9;
+}
+
+
+html[data-mantine-color-scheme="dark"] {
+  /* --- Editor Obecné --- */
+  --editor-border-color: #2f2f34;
+  --editor-bg-color: #1E1F22;
+  --editor-text-color: #e4e4e4;
+  --editor-heading-border: rgba(255, 255, 255, 0.2);
+  --editor-link-color: #60a5fa;
+  --editor-link-hover: #c084fc;
+  --editor-quote-color: rgb(180, 180, 180);
+  --editor-quote-border: #5a5a5a;
+  --editor-code-bg: #f9f8f7;
+  --editor-inline-code-bg: #3a3a3a;
+
+  /* --- Toolbar --- */
+  --toolbar-bg: #252629;
+  --toolbar-button-bg: rgb(60, 60, 60);
+  --toolbar-button-hover-bg: rgb(80, 80, 80);
+  --toolbar-icon-color: #e4e4e4;
+  --toolbar-icon-hover-color: #ffffff;
+  --toolbar-icon-active-color: #ff9933;
+
+  /* --- Popover (Dropdown menu) --- */
+  --popover-bg: #252629;
+  --popover-item-bg: #2b2b2b;
+  --popover-item-text: #b0b0b0;
+  --popover-item-hover-text: #ffffff;
+  --popover-item-active-text: #ff9933;
+  --popover-checkmark-color: #ffffff;
+
+  /* --- Image Toolbar --- */
+  --image-toolbar-bg: #252629;
+  --image-toolbar-border: #444;
+  --image-toolbar-shadow: rgba(0, 0, 0, 0.5);
+  --image-toolbar-separator: #555;
+  --image-outline: #60a5fa;
+
+  /* --- Preview (LinkPreviewPlugin) --- */
+  --preview-bg: rgb(60, 60, 60);
+  --preview-text-color: #e4e4e4;
+  
+  /* --- NOVÉ PROMĚNNÉ (z hardcoded hodnot) --- */
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.8); /* Zůstává stejné */
+  --icon-color-default: #b0b0b0;     
+  --icon-color-subtle: #878787;      
+  --icon-color-disabled: #444;       
+}
+
+/* * TATO ČÁST ZŮSTÁVÁ BEZE ZMĚNY
+ */
+
+.editor-paragraph {
+  font-size: 15px;
+  line-height: 25px;
+  margin: 15px 0 -5px;
+  color: var(--editor-text-color);
+}
+
+.editor-heading-h1 {
+  font-size: 28px;
+  font-weight: 650;
+  line-height: 25px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--editor-heading-border);
+  color: var(--editor-text-color);
+}
+
+.editor-heading-h2 {
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 28px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--editor-heading-border);
+  color: var(--editor-text-color);
+}
+
+.editor-heading-h3 {
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 25px;
+  margin-bottom: -6px;
+  color: var(--editor-text-color);
+}
+
+.editor-heading-h4 {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 20px;
+  margin-bottom: -3px;
+  color: var(--editor-text-color);
+}
+
+.editor-link {
+  color: var(--editor-link-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.editor-link:hover {
+  color: var(--editor-link-hover);
+}
+
+.editor-textBold {
+  font-weight: 600;
+}
+
+.editor-textItalic {
+  font-style: italic;
+}
+
+.editor-textUnderline {
+  text-decoration: underline;
+}
+
+.editor-textStrikethrough {
+  text-decoration: line-through;
+}
+
+.editor-textCode {
+  font-family: "Google Sans Code", monospace;
+  background-color: var(--editor-inline-code-bg);
+  padding: 1px 5px;
+  border-radius: 6px;
+  color: var(--editor-text-color);
+}
+
+.editor-quote {
+  font-size: 15px;
+  color: var(--editor-quote-color);
+  border-left: 4px solid var(--editor-quote-border);
+  padding-left: 12px;
+  margin: 20px 0 5px 0;
+  line-height: 25px;
+}
+
+.editor-list-ol {
+  padding: 0;
+  margin: 0 0 30px 20px;
+  color: var(--editor-text-color);
+}
+
+.editor-list-ol ol {
+  margin-top: 0;
+  list-style-type: upper-alpha;
+}
+
+.editor-list-ol ol ol {
+  margin-top: 0;
+  list-style-type: upper-roman;
+}
+
+.editor-list-ul {
+  padding: 0;
+  margin: 0 0 30px 16px;
+  color: var(--editor-text-color);
+}
+
+.editor-list-ul ul {
+  margin-top: 0;
+}
+
+.editor-list-ol,
+.editor-list-ul {
+  margin-top: 15px;
+  font-size: 15px;
+}
+
+.editor-list-ul li {
+  margin-left: 12px;
+  line-height: 30px;
+}
+
+.editor-list-ol li {
+  margin-left: 12px;
+  line-height: 30px;
+}
+
+.editor-list-ol li::marker {
+  font-weight: 550;
+}
+
+.editor-listitem {
+  margin: 8px 32px 8px 32px;
+}
+
+.editor-nested-listitem {
+  list-style-type: none;
+}
+
+.editor-code {
+  display: block;
+  background: var(--editor-code-bg) !important;
+  padding: 30px 30px 30px 30px;
+  border-radius: 8px;
+  font-family: "Google Sans Code", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  position: relative;
+  margin-top: 10px;
+  color: var(--editor-text-color);
+}
